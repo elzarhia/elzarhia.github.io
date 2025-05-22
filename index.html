@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Selamat Ulang Tahun, Sayang!</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <audio id="music" autoplay loop>
+    <source src="assets/happy_birthday.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="overlay"></div>
+  <canvas id="canvas"></canvas>
+
+  <div class="container">
+    <h1>🎂 Selamat Ulang Tahun, Cintaku ❤️</h1>
+    <p class="intro">Hari ini adalah hari istimewa karena kamu lahir dan menjadi bagian dari hidupku.</p>
+    <button onclick="showLoveNote()">💌 Buka Pesan Cinta</button>
+    <div id="note" class="note"></div>
+  </div>
+
+  <script>
+    const loveText = `Sayangku...
+
+Selamat ulang tahun, cinta. Kamu adalah cahaya dalam hidupku, senyum di hariku, dan alasan aku bahagia setiap pagi.
+
+Aku bersyukur Tuhan mempertemukan kita. Semoga hari ini dan selamanya kamu selalu bahagia — bersamaku ❤️`;
+
+    function showLoveNote() {
+      const note = document.getElementById("note");
+      note.style.display = "block";
+      let i = 0;
+      note.innerHTML = "";
+      const typing = setInterval(() => {
+        note.textContent += loveText[i];
+        i++;
+        if (i >= loveText.length) clearInterval(typing);
+      }, 50);
+    }
+
+    // Kembang api
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    let particles = [];
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.radius = Math.random() * 3 + 1;
+        this.color = `hsl(${Math.random() * 360}, 100%, 70%)`;
+        this.speedX = (Math.random() - 0.5) * 2;
+        this.speedY = (Math.random() - 0.5) * 2;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+      }
+    }
+
+    function initParticles(n) {
+      for (let i = 0; i < n; i++) {
+        particles.push(new Particle());
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    initParticles(100);
+    animate();
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+</html>
